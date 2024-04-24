@@ -1,7 +1,6 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CityDetail } from "../types/CityDetail";
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import axios from 'axios';
 import { db, firebaseAuth } from '../firebase/firebaseinit';
 import { getWeatherInfo } from "../utils/fetchClient";
 
