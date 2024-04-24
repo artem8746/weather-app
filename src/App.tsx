@@ -11,7 +11,7 @@ import { Navigation } from "./components/Navigation";
 import { CityDetail } from "./types/CityDetail";
 
 import "./components/Navigation/Navigation.scss";
-import { CityDetails } from "./pages/CityDetails";
+import { CityDetails } from "./pages/CityDetails/CityDetails";
 import { getCityWeather } from "./features/weatherSlice";
 import { useAppDispatch } from "./app/hooks";
 // import { WeatherData } from "./types/WeatherData";

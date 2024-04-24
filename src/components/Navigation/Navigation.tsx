@@ -1,6 +1,9 @@
 import React from 'react';
 import './Navigation.scss';
 import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
+import MeetingRoom from '@mui/icons-material/MeetingRoom';
+import { firebaseAuth } from '../../firebase/firebaseinit';
 
 interface Props {
   addCityActive: boolean;
@@ -15,6 +18,10 @@ export const Navigation: React.FC<Props> = ({ addCityActive, isDay, isNight, onA
     window.location.reload();
   };
 
+  const handleLogout = async () => {
+    await firebaseAuth.signOut();
+  }
+
   const currentDate = new Date();
   const weekday = currentDate.toLocaleString("en-us", { weekday: "short" });
   const month = currentDate.toLocaleString("en-us", { month: "short" });
@@ -27,6 +34,13 @@ export const Navigation: React.FC<Props> = ({ addCityActive, isDay, isNight, onA
           <nav>
             <span>Add City</span>
             <div className="right">
+              <Button
+                variant="contained"
+                endIcon={<MeetingRoom />}
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
               <i onClick={onEditCities} className="far fa-edit"></i>
               <i onClick={reloadApp} className="fas fa-sync"></i>
               <i onClick={onAddCity} className="fas fa-plus"></i>

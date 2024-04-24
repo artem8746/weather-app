@@ -1,6 +1,5 @@
 import React from "react";
 import "./AppCity.scss";
-import { CityDetail } from "../../types/CityDetail";
 import { City } from "../City/City";
 import { useAppSelector } from "../../app/hooks";
 

@@ -4,7 +4,7 @@ import "./index.scss";
 import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
 import { store } from "./app/store.ts";
-import { Root } from "./Root/Root.tsx";
+import { Root } from "./components/Root/Root.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -1,17 +1,19 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CityDetail } from "../types/CityDetail";
-import { getData } from "../utils/getData";
-import { collection, getDocs, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import axios from 'axios';
-import { db } from '../firebase/firebaseinit';
+import { db, firebaseAuth } from '../firebase/firebaseinit';
+import { getWeatherInfo } from "../utils/fetchClient";
 
 interface InitialState {
+  cities: string[];
   cityDetails: CityDetail[];
   loading: boolean;
   error: string;
 }
 
 const initialState: InitialState = {
+  cities: [],
   cityDetails: [],
   loading: true,
   error: "",
@@ -21,9 +23,7 @@ const weatherSlice = createSlice({
   name: 'weather',
   initialState,
   reducers: {
-    getCity: (state, action: PayloadAction<string>) => {
-      return state.cityDetails.find((city) => city.city === action.payload);
-    }
+
   },
   extraReducers: (builder) => {
     builder.addCase(getCityWeather.pending, (state) => {
@@ -31,9 +31,22 @@ const weatherSlice = createSlice({
     });
     builder.addCase(getCityWeather.fulfilled, (state, action) => {
       state.cityDetails = action.payload;
+      state.cities = action.payload.map(cityDetail => cityDetail.city);
       state.loading = false;
     });
     builder.addCase(getCityWeather.rejected, (state) => {
+      state.loading = false;
+      state.error = 'error';
+    });
+
+    builder.addCase(updateCities.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateCities.fulfilled, (state, action) => {
+      state.cities = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(updateCities.rejected, (state) => {
       state.loading = false;
       state.error = 'error';
     });
@@ -41,30 +54,42 @@ const weatherSlice = createSlice({
 });
 
 export default weatherSlice.reducer;
-export const { getCity } = weatherSlice.actions;
 
 export const getCityWeather = createAsyncThunk("weather/getCityWeather", async () => {
-  const firebaseDB = collection(db, "cities");
+  const documentId = firebaseAuth.currentUser!.uid;
 
-  const snapshot = await getDocs(firebaseDB);
-  const newCities = [];
-  for (const doc of snapshot.docs) {
+  const docRef = doc(db, "cities", documentId);
+  const docSnap = await getDoc(docRef);
+
+  const cities = docSnap.data() as string[] || [];
+
+  const citiesWeatherInfo = [] as CityDetail[];
+
+  for (let i = 0; i < cities.length; i++) {
     try {
-      const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${doc.data().city}&units=metric&appid=${import.meta.env.VITE_WEATHER_APP_API_KEY}`,
-      );
+      const response = await getWeatherInfo(cities[i]);
 
       const data = response.data;
-      await updateDoc(doc.ref, {
-        currentWeather: data,
-      });
 
-      newCities.push({ ...doc.data(), currentWeather: data });
+      citiesWeatherInfo.push({ city: cities[i], currentWeather: data });
     } catch (err) {
       console.log(err);
     }
   }
 
-  return newCities.map((city) => ({ ...city, city: city.currentWeather.name }));
+  return citiesWeatherInfo;
 });
 
+export const updateCities = createAsyncThunk("weather/addCity", async (updatedCities: string[]) => {
+  const documentId = firebaseAuth.currentUser!.uid;
+
+  const updatedDoc = {
+    cities: updatedCities
+  };
+
+  const docRef = doc(db, "cities", documentId);
+
+  await updateDoc(docRef, updatedDoc);
+
+  return updatedCities;
+});
