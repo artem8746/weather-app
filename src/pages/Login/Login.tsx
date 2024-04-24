@@ -23,10 +23,9 @@ export const Login = () => {
     const data = new FormData(event.currentTarget);
     const email = data.get('email') as string;
     const password = data.get('password') as string;
-    const rememberMe = !!data.get('remember');
 
     try {
-      if (rememberMe) {
+      if (rememberMeRef.current!.value) {
         await setPersistence(firebaseAuth, inMemoryPersistence);
       }
 
@@ -43,7 +42,7 @@ export const Login = () => {
       await setPersistence(firebaseAuth, inMemoryPersistence);
     }
 
-    await signInAnonymously(firebaseAuth)
+    await signInAnonymously(firebaseAuth);
 
     navigate("/");
   };
@@ -56,7 +55,7 @@ export const Login = () => {
 
       const provider = new GoogleAuthProvider();
 
-      await signInWithPopup(firebaseAuth, provider)
+      await signInWithPopup(firebaseAuth, provider);
 
       navigate("/");
     } catch (ex) {

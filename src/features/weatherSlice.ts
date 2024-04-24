@@ -57,10 +57,12 @@ export default weatherSlice.reducer;
 export const getCityWeather = createAsyncThunk("weather/getCityWeather", async () => {
   const documentId = firebaseAuth.currentUser!.uid;
 
-  const docRef = doc(db, "cities", documentId);
+  const docRef = doc(db, "users", documentId);
   const docSnap = await getDoc(docRef);
 
   const cities = docSnap.data() as string[] || [];
+
+  console.log(cities, 'cir');
 
   const citiesWeatherInfo = [] as CityDetail[];
 
@@ -79,16 +81,18 @@ export const getCityWeather = createAsyncThunk("weather/getCityWeather", async (
   return citiesWeatherInfo;
 });
 
-export const updateCities = createAsyncThunk("weather/addCity", async (updatedCities: string[]) => {
+export const updateCities = createAsyncThunk("weather/addCity", async (updatedCities: string[], { dispatch }) => {
   const documentId = firebaseAuth.currentUser!.uid;
 
   const updatedDoc = {
     cities: updatedCities
   };
 
-  const docRef = doc(db, "cities", documentId);
+  const docRef = doc(db, "users", documentId);
 
   await updateDoc(docRef, updatedDoc);
+
+  dispatch(getCityWeather);
 
   return updatedCities;
 });

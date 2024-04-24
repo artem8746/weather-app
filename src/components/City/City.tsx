@@ -37,25 +37,25 @@ export const City: React.FC<Props> = ({ city, edit }) => {
   };
 
   return (
-      <Link to={city.city} className="city">
-        {edit && <i onClick={removeCity} className="far fa-trash-alt edit"></i>}
-        <span>{city.city}</span>
-        <div className="weather">
-          <span>{Math.round(city.currentWeather.main.temp)}&deg;</span>
-          <img
-            src={`../../public/conditions/${city.currentWeather.weather[0].icon}.svg`}
-            alt=""
-          />
-        </div>
-        <div className="video">
-          <video
-            autoPlay
-            loop
-            muted
-            src={`../../public/videos/${city.currentWeather.weather[0].icon}.mp4`}
-          ></video>
-          <div className="bg-overlay"></div>
-        </div>
-      </Link>
+    <Link to={city.city} className="city">
+      {edit && <i onClick={removeCity} className="far fa-trash-alt edit"></i>}
+      <span>{city.city}</span>
+      <div className="weather">
+        <span>{Math.round(city.currentWeather.main.temp)}&deg;</span>
+        <img
+          src={`../../public/conditions/${city.currentWeather.weather[0].icon}.svg`}
+          alt=""
+        />
+      </div>
+      <div className="video">
+        <video
+          autoPlay
+          loop
+          muted
+          src={`../../public/videos/${city.currentWeather.weather[0].icon}.mp4`}
+        ></video>
+        <div className="bg-overlay"></div>
+      </div>
+    </Link>
   );
 };
