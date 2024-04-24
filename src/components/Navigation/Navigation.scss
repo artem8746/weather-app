@@ -1,8 +1,9 @@
 .add-city {
   z-index: 99;
-  background-color: #313640;
+  background-color: rgba(59, 68, 96, 1);
   position: fixed;
   max-width: 1024px;
+  top: 0;
   width: 100%;
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
