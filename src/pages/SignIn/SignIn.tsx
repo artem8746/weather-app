@@ -25,8 +25,8 @@ export const SignIn: React.FC<Props> = ({ isSignUp }) => {
   const handleSubmitSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const email = data.get('email') as string;
-    const password = data.get('password') as string;
+    const email = data.get("email") as string;
+    const password = data.get("password") as string;
 
     try {
       if (rememberMeRef.current!.value) {
@@ -87,7 +87,7 @@ export const SignIn: React.FC<Props> = ({ isSignUp }) => {
   };
 
   return (
-    <Grid container component="main" sx={{ height: '100vh' }}>
+    <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
       <Grid
         item
@@ -95,12 +95,14 @@ export const SignIn: React.FC<Props> = ({ isSignUp }) => {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
-          backgroundRepeat: 'no-repeat',
+          backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
+          backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
-            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+            t.palette.mode === "light"
+              ? t.palette.grey[50]
+              : t.palette.grey[900],
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -108,12 +110,12 @@ export const SignIn: React.FC<Props> = ({ isSignUp }) => {
           sx={{
             my: 8,
             mx: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -158,7 +160,14 @@ export const SignIn: React.FC<Props> = ({ isSignUp }) => {
               />
             )}
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" name='remember' ref={rememberMeRef} />}
+              control={
+                <Checkbox
+                  value="remember"
+                  color="primary"
+                  name="remember"
+                  ref={rememberMeRef}
+                />
+              }
               label="Remember me"
             />
             <Button
@@ -189,9 +198,7 @@ export const SignIn: React.FC<Props> = ({ isSignUp }) => {
             </Button>
             <Grid container>
               <Grid item>
-                <Link to="/sign-up">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <Link to="/sign-up">{"Don't have an account? Sign Up"}</Link>
               </Grid>
             </Grid>
           </Box>
@@ -199,4 +206,4 @@ export const SignIn: React.FC<Props> = ({ isSignUp }) => {
       </Grid>
     </Grid>
   );
-}
+};

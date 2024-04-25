@@ -4,7 +4,6 @@ import { CityDetails } from "../../pages/CityDetails/CityDetails";
 import App from "../../App";
 import { AuthProvider } from "../../providers/AuthProvider";
 import { SignIn } from "../../pages/SignIn";
-import { SignUp } from "../../pages/SignUp";
 
 export const Root: React.FC = () => {
   return (

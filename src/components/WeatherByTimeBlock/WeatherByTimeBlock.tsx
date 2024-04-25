@@ -1,5 +1,5 @@
-import { Box, Typography, Paper } from '@mui/material';
-import iconUrlFromCode from '../../utils/iconUrlFromCode';
+import { Box, Typography, Paper } from "@mui/material";
+import iconUrlFromCode from "../../utils/iconUrlFromCode";
 
 type WeatherByTimeBlockProps = {
   time: string;
@@ -17,12 +17,12 @@ const WeatherByTimeBlock = ({
   return (
     <Paper
       sx={{
-        maxWidth: '100px',
-        width: '100%',
-        height: '105px',
-        background: 'transparent',
-        textAlign: 'center',
-        p: '10px',
+        maxWidth: "100px",
+        width: "100%",
+        height: "105px",
+        background: "transparent",
+        textAlign: "center",
+        p: "10px",
       }}
     >
       <Typography>{time}</Typography>

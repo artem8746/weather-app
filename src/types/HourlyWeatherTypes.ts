@@ -11,13 +11,13 @@ interface HourlyWeatherResponds {
 interface HourlyWeather
   extends Omit<
     WeatherData,
-    'coord' | 'sys' | 'timezone' | 'id' | 'base' | 'name'
+    "coord" | "sys" | "timezone" | "id" | "base" | "name"
   > {
   sys: {
     pod: string;
   };
   rain: {
-    '3h': number;
+    "3h": number;
   };
   dt_txt: number;
   details: TDetails;

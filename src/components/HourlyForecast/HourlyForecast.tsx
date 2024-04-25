@@ -1,11 +1,4 @@
-// import { useQuery } from "react-query";
 import { Box } from "@mui/material";
-
-// import WeatherService from "src/services/weatherServices";
-// import { toLocalTime } from "src/utils";
-// import WeatherByTimeBlock from "src/components/WeatherByTimeBlock";
-
-// import HourlyForecastLoader from "./HourlyForecastLoader";
 import { HourlyWeatherResponds } from "../../types/HourlyWeatherTypes";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -24,17 +17,16 @@ export default function HourlyForecast({
   lon,
   timezone,
 }: THourlyForecastProps): JSX.Element {
-
   const { city } = useParams();
 
-  const [weatherForecast, setWeatherForecast] = useState<HourlyWeatherResponds | null>(null);
-
+  const [weatherForecast, setWeatherForecast] =
+    useState<HourlyWeatherResponds | null>(null);
 
   useEffect(() => {
     const fetchCityDetails = async () => {
       try {
         const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&lat=${lat}&lon=${lon}&cnt=8&appid=${import.meta.env.VITE_WEATHER_APP_API_KEY}`
+          `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&lat=${lat}&lon=${lon}&cnt=8&appid=${import.meta.env.VITE_WEATHER_APP_API_KEY}`,
         );
         setWeatherForecast(response.data);
       } catch (error) {
@@ -47,10 +39,9 @@ export default function HourlyForecast({
   }, [city]);
 
   console.log(weatherForecast);
-  
 
   if (!weatherForecast) {
-    return <div>Loading...</div>; // Або інша обробка загрузки
+    return <div>Loading...</div>;
   }
 
   return (

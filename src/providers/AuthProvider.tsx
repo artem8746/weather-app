@@ -21,7 +21,5 @@ export const AuthProvider = () => {
     })
   }, []);
 
-  return (
-    <Outlet />
-  )
-}
+  return <Outlet />;
+};
