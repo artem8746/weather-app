@@ -15,13 +15,7 @@ function App() {
   const { cities } = useAppSelector(state => state.weather);
   const [autocompleteCities, setAutocompleteCities] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [edit, setEdit] = useState(false);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    // dispatch(getCityWeather());
-    // checkRoute();
-  }, []);
 
   const updateAutocompleteCities = useCallback(
     debounce((newCity: string) => {
@@ -40,17 +34,10 @@ function App() {
     [],
   );
 
-  const handleModalOpen = () => {
-    dispatch(cityModalActions.changeModalState(true));
-  };
-
   const handleModalClose = () => {
     dispatch(cityModalActions.reset());
   }
 
-  const toggleEdit = () => {
-    setEdit(!edit);
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -78,10 +65,7 @@ function App() {
         </div>
       ) : (
         <div className="app">
-          <Navigation
-            onAddCity={handleModalOpen}
-            onEditCities={toggleEdit}
-          />
+          <Navigation />
           <Outlet />
 
           <Modal

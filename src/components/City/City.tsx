@@ -1,12 +1,4 @@
 import React from "react";
-import { db } from "../../firebase/firebaseinit";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  deleteDoc,
-} from "firebase/firestore";
 import "./City.scss";
 import { CityDetail } from "../../types/CityDetail";
 import { Link } from "react-router-dom";
@@ -14,22 +6,18 @@ import { Link } from "react-router-dom";
 interface Props {
   city: CityDetail;
   edit: boolean;
+  onCityRemove: (city: string) => void
 }
 
-export const City: React.FC<Props> = ({ city, edit }) => {
-  const removeCity = async () => {
-    const citiesRef = collection(db, "cities");
-    const q = query(citiesRef, where("city", "==", city.city));
-    const snapshot = await getDocs(q);
-
-    snapshot.docs.forEach(async (doc) => {
-      await deleteDoc(doc.ref);
-    });
-  };
+export const City: React.FC<Props> = ({ city, edit, onCityRemove }) => {
+  const handleDeleteButtonClicked = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    event.preventDefault();
+    onCityRemove(city.city)
+  }
 
   return (
     <Link to={city.city} className="city" style={{ textDecoration: "none" }}>
-      {edit && <i onClick={removeCity} className="far fa-trash-alt edit"></i>}
+      {edit && <i onClick={handleDeleteButtonClicked} className="far fa-trash-alt edit"></i>}
       <span>{city.city}</span>
       <div className="weather">
         <span>{Math.round(city.currentWeather.main.temp)}&deg;</span>
@@ -49,4 +37,4 @@ export const City: React.FC<Props> = ({ city, edit }) => {
       </div>
     </Link>
   );
-};
+}

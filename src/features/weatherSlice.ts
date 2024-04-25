@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CityDetail } from "../types/CityDetail";
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db, firebaseAuth } from '../firebase/firebaseinit';
@@ -9,6 +9,7 @@ interface InitialState {
   cityDetails: CityDetail[];
   loading: boolean;
   error: string;
+  isEditing: boolean;
 }
 
 const initialState: InitialState = {
@@ -16,12 +17,17 @@ const initialState: InitialState = {
   cityDetails: [],
   loading: true,
   error: "",
+  isEditing: false,
 };
 
 const weatherSlice = createSlice({
   name: "weather",
   initialState,
-  reducers: {},
+  reducers: {
+    changeIsEditing: (state, action: PayloadAction<boolean>) => {
+      state.isEditing = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getCityWeather.pending, (state) => {
       state.loading = true;
@@ -67,22 +73,22 @@ export const getCityWeather = createAsyncThunk("weather/getCityWeather", async (
 
   const { cities } = docSnap.data() as { cities: string };
 
-    const citiesWeatherInfo = [] as CityDetail[];
+  const citiesWeatherInfo = [] as CityDetail[];
 
-    for (let i = 0; i < cities.length; i++) {
-      try {
-        const response = await getWeatherInfo(cities[i]);
+  for (let i = 0; i < cities.length; i++) {
+    try {
+      const response = await getWeatherInfo(cities[i]);
 
-        const data = response.data;
+      const data = response.data;
 
-        citiesWeatherInfo.push({ city: cities[i], currentWeather: data });
-      } catch (err) {
-        console.log(err);
-      }
+      citiesWeatherInfo.push({ city: cities[i], currentWeather: data });
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    return citiesWeatherInfo;
-  },
+  return citiesWeatherInfo;
+},
 );
 
 export const updateCities = createAsyncThunk(
@@ -98,8 +104,10 @@ export const updateCities = createAsyncThunk(
 
     await updateDoc(docRef, updatedDoc);
 
-  dispatch(getCityWeather());
+    dispatch(getCityWeather());
 
     return updatedCities;
   },
 );
+
+export const actions = { ...weatherSlice.actions };

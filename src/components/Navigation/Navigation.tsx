@@ -4,19 +4,25 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@mui/material";
 import MeetingRoom from "@mui/icons-material/MeetingRoom";
 import { firebaseAuth } from "../../firebase/firebaseinit";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { actions as weatherActions } from '../../features/weatherSlice';
+import { actions as cityModalActions } from '../../features/addCityModalSlice';
 
-interface Props {
-  onAddCity: () => void;
-  onEditCities: () => void;
-}
+export const Navigation: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { isEditing } = useAppSelector(state => state.weather);
 
-export const Navigation: React.FC<Props> = ({
-  onAddCity,
-  onEditCities,
-}) => {
   const reloadApp = () => {
     window.location.reload();
   };
+
+  const onEditCities = () => {
+    dispatch(weatherActions.changeIsEditing(!isEditing));
+  }
+
+  const onAddCity = () => {
+    dispatch(cityModalActions.changeModalState(true));
+  }
 
   const handleLogout = async () => {
     await firebaseAuth.signOut();
