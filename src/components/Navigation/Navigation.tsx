@@ -1,18 +1,16 @@
 import React from "react";
 import "./Navigation.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@mui/material";
 import MeetingRoom from "@mui/icons-material/MeetingRoom";
 import { firebaseAuth } from "../../firebase/firebaseinit";
 
 interface Props {
-  addCityActive: boolean;
   onAddCity: () => void;
   onEditCities: () => void;
 }
 
 export const Navigation: React.FC<Props> = ({
-  addCityActive,
   onAddCity,
   onEditCities,
 }) => {
@@ -28,10 +26,11 @@ export const Navigation: React.FC<Props> = ({
   const weekday = currentDate.toLocaleString("en-us", { weekday: "short" });
   const month = currentDate.toLocaleString("en-us", { month: "short" });
   const day = currentDate.toLocaleString("en-us", { day: "2-digit" });
+  const location = useLocation();
 
   return (
     <div>
-      {addCityActive ? (
+      {location.pathname === '/' ? (
         <header className="container add-city">
           <nav>
             <span>Add City</span>
@@ -52,11 +51,11 @@ export const Navigation: React.FC<Props> = ({
       ) : (
         <header className="container">
           <nav>
-            <Link className="router-link" to="/add-city">
-              <i className="fas fa-plus"></i>
+            <Link className="router-link" to="/">
+              <i className="fas fa-home"></i>
             </Link>
             <span>{`${weekday}, ${month} ${day}`}</span>
-            <span>&deg; F</span>
+            <span>&deg; C</span>
           </nav>
         </header>
       )}
