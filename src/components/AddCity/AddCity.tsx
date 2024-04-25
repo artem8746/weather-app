@@ -9,22 +9,21 @@ import clsx from 'clsx';
 import { Autocomplete, Box, TextField, debounce } from "@mui/material";
 import { updateCities } from "../../features/weatherSlice";
 import { getCities } from "../../utils/fetchClient";
+import { actions as cityModalActions } from "../../features/addCityModalSlice";
 
 
 export const AddCity: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [newCity, setNewCity] = useState('');
+  const { isOpened, newCity } = useAppSelector(state => state.cityModal);
   const [autocompleteCities, setAutocompleteCities] = useState([]);
   const { cityDetails, cities } = useAppSelector((state) => state.weather);
-  const [isModalOpened, setIsModalOpened] = useState(false);
 
   const handleModalOpen = () => {
-    setIsModalOpened(true);
+    dispatch(cityModalActions.changeModalState(true))
   };
 
   const handleModalClose = () => {
-    setNewCity('');
-    setIsModalOpened(false);
+    dispatch(cityModalActions.reset());
   };
 
   const updateAutocompleteCities = useCallback(
@@ -57,7 +56,7 @@ export const AddCity: React.FC = () => {
   }
 
   const onNewCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewCity(e.target.value);
+    dispatch(cityModalActions.changeNewCity(e.target.value));
 
     updateAutocompleteCities(e.target.value);
   }
@@ -72,7 +71,7 @@ export const AddCity: React.FC = () => {
           <Modal
             aria-labelledby="unstyled-modal-title"
             aria-describedby="unstyled-modal-description"
-            open={isModalOpened}
+            open={isOpened}
             onClose={handleModalClose}
             slots={{ backdrop: StyledBackdrop }}
           >

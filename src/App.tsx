@@ -30,7 +30,7 @@ function App() {
   const [cities, setCities] = useState<CityDetail[]>([]);
 
   useEffect(() => {
-    dispatch(getCityWeather());
+    // dispatch(getCityWeather());
     // checkRoute();
   }, []);
 

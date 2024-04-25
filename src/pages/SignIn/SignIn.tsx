@@ -12,13 +12,17 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { Link, useNavigate } from 'react-router-dom';
 import { firebaseAuth } from '../../firebase/firebaseinit';
-import { GoogleAuthProvider, inMemoryPersistence, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, inMemoryPersistence, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 
-export const Login = () => {
+interface Props {
+  isSignUp?: boolean
+}
+
+export const SignIn: React.FC<Props> = ({ isSignUp }) => {
   const navigate = useNavigate();
   const rememberMeRef = React.useRef<HTMLButtonElement>(null);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email') as string;
@@ -30,6 +34,25 @@ export const Login = () => {
       }
 
       await signInWithEmailAndPassword(firebaseAuth, email, password);
+
+      navigate("/");
+    } catch (ex) {
+      // handle exeption
+    }
+  };
+
+  const handleSubmitSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const email = data.get('email') as string;
+    const password = data.get('password') as string;
+
+    try {
+      if (rememberMeRef.current!.value) {
+        await setPersistence(firebaseAuth, inMemoryPersistence);
+      }
+
+      await createUserWithEmailAndPassword(firebaseAuth, email, password);
 
       navigate("/");
     } catch (ex) {
@@ -94,9 +117,14 @@ export const Login = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            {isSignUp ? 'Sign up' : 'Sign in'}
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={isSignUp ? handleSubmitSignUp : handleSubmitSignIn}
+            sx={{ mt: 1 }}
+          >
             <TextField
               margin="normal"
               required
@@ -117,6 +145,18 @@ export const Login = () => {
               id="password"
               autoComplete="current-password"
             />
+            {isSignUp && (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="confirmedPassword"
+                label="Confirm password"
+                type="password"
+                id="confirmedPassword"
+                autoComplete="current-password"
+              />
+            )}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" name='remember' ref={rememberMeRef} />}
               label="Remember me"
@@ -127,7 +167,7 @@ export const Login = () => {
               variant="contained"
               sx={{ mt: 3, mb: 3 }}
             >
-              Sign In
+              {isSignUp ? 'Sign up' : 'Sign in'}
             </Button>
             <Button
               type="button"

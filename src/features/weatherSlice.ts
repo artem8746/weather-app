@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CityDetail } from "../types/CityDetail";
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db, firebaseAuth } from '../firebase/firebaseinit';
 import { getWeatherInfo } from "../utils/fetchClient";
 
@@ -56,13 +56,18 @@ export default weatherSlice.reducer;
 
 export const getCityWeather = createAsyncThunk("weather/getCityWeather", async () => {
   const documentId = firebaseAuth.currentUser!.uid;
-
-  const docRef = doc(db, "users", documentId);
+  const docRef = await doc(db, "users", documentId);
   const docSnap = await getDoc(docRef);
 
-  const cities = docSnap.data() as string[] || [];
+  if (!docSnap.exists()) {
+    await setDoc(docRef, {
 
-  console.log(cities, 'cir');
+    });
+
+    return [];
+  }
+
+  const { cities } = docSnap.data() as { cities: string };
 
   const citiesWeatherInfo = [] as CityDetail[];
 
@@ -92,7 +97,7 @@ export const updateCities = createAsyncThunk("weather/addCity", async (updatedCi
 
   await updateDoc(docRef, updatedDoc);
 
-  dispatch(getCityWeather);
+  dispatch(getCityWeather());
 
   return updatedCities;
 });

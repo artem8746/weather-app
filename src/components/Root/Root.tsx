@@ -3,7 +3,7 @@ import { AddCity } from "../AddCity/AddCity";
 import { CityDetails } from "../../pages/CityDetails/CityDetails";
 import App from "../../App";
 import { AuthProvider } from "../../providers/AuthProvider";
-import { Login } from "../../pages/Login";
+import { SignIn } from "../../pages/SignIn";
 import { SignUp } from "../../pages/SignUp";
 
 export const Root: React.FC = () => {
@@ -16,9 +16,9 @@ export const Root: React.FC = () => {
         </Route>
       </Route>
 
-      <Route path="login" element={<Login />} />
+      <Route path="login" element={<SignIn />} />
 
-      <Route path="sign-up" element={<SignUp />} />
+      <Route path="sign-up" element={<SignIn isSignUp />} />
 
       {/* <Route path="*" element={<PageNotFound />} /> */}
     </Routes>
