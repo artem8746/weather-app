@@ -1,3 +1,3 @@
-type TDetails = 'Rain' | 'Clouds' | 'Clear' | 'Snow';
+type TDetails = "Rain" | "Clouds" | "Clear" | "Snow";
 
 export type { TDetails };

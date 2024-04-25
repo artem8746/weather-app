@@ -9,12 +9,10 @@ export const AuthProvider = () => {
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (user) => {
       if (!user) {
-        navigate('login');
+        navigate("login");
       }
-    })
+    });
   }, []);
 
-  return (
-    <Outlet />
-  )
-}
+  return <Outlet />;
+};

@@ -1,19 +1,18 @@
 import React, { forwardRef, useCallback, useState } from "react";
-import "./AppCity.scss";
+import "./AddCity.scss";
 import { City } from "../City/City";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-
-import { styled, css } from '@mui/system';
-import { Modal as BaseModal } from '@mui/base/Modal';
-import clsx from 'clsx';
+import { styled, css } from "@mui/system";
+import { Modal as BaseModal } from "@mui/base/Modal";
+import clsx from "clsx";
 import { Autocomplete, Box, TextField, debounce } from "@mui/material";
 import { updateCities } from "../../features/weatherSlice";
 import { getCities } from "../../utils/fetchClient";
-
+import { CityDetail } from "../../types/CityDetail";
 
 export const AddCity: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [newCity, setNewCity] = useState('');
+  const [newCity, setNewCity] = useState("");
   const [autocompleteCities, setAutocompleteCities] = useState([]);
   const { cityDetails, cities } = useAppSelector((state) => state.weather);
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -23,26 +22,26 @@ export const AddCity: React.FC = () => {
   };
 
   const handleModalClose = () => {
-    setNewCity('');
+    setNewCity("");
     setIsModalOpened(false);
   };
 
   const updateAutocompleteCities = useCallback(
-    debounce(
-      (newCity: string) => {
-        if (newCity.trim()) {
-          getCities(newCity)
-            .then(({ data: { data } }) => {
-              const cities = data.map(({ city }: { city: string }) => city);
+    debounce((newCity: string) => {
+      if (newCity.trim()) {
+        getCities(newCity)
+          .then(({ data: { data } }) => {
+            const cities = data.map(({ city }: { city: string }) => city);
 
-              setAutocompleteCities(cities);
-            })
-            .catch(() => {
-              updateAutocompleteCities(newCity);
-            });
-        }
-      }, 300
-    ), []);
+            setAutocompleteCities(cities);
+          })
+          .catch(() => {
+            updateAutocompleteCities(newCity);
+          });
+      }
+    }, 300),
+    [],
+  );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,22 +50,22 @@ export const AddCity: React.FC = () => {
 
     const data = new FormData(event.currentTarget);
 
-    const city = data.get('city') as string;
+    const city = data.get("city") as string;
 
-    dispatch(updateCities([...cities, city]))
-  }
+    dispatch(updateCities([...cities, city]));
+  };
 
   const onNewCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewCity(e.target.value);
 
     updateAutocompleteCities(e.target.value);
-  }
+  };
 
   return (
     <div>
       {cityDetails.length === 0 ? (
         <div className="no-cities">
-          <p>No cities added, add a new one?</p>
+          <p style={{ color: "black" }}>No cities added, add a new one?</p>
           <button onClick={handleModalOpen}>Add City</button>
 
           <Modal
@@ -102,11 +101,13 @@ export const AddCity: React.FC = () => {
         </div>
       ) : (
         <div className="grid">
-          {cityDetails.map((city, index) => (
-            <div className="city-link" key={index}>
-              <City city={city} edit={false} />
-            </div>
-          ))}
+          {cityDetails.map(
+            (city: CityDetail, index: React.Key | null | undefined) => (
+              <div className="city-link" key={index}>
+                <City city={city} edit={false} />
+              </div>
+            ),
+          )}
         </div>
       )}
     </div>
@@ -121,7 +122,7 @@ const Backdrop = forwardRef<
   const { open, className, ...other } = props;
   return (
     <div
-      className={clsx({ 'base-Backdrop-open': open }, className)}
+      className={clsx({ "base-Backdrop-open": open }, className)}
       ref={ref}
       {...other}
     />
@@ -129,16 +130,16 @@ const Backdrop = forwardRef<
 });
 
 const grey = {
-  50: '#F3F6F9',
-  100: '#E5EAF2',
-  200: '#DAE2ED',
-  300: '#C7D0DD',
-  400: '#B0B8C4',
-  500: '#9DA8B7',
-  600: '#6B7A90',
-  700: '#434D5B',
-  800: '#303740',
-  900: '#1C2025',
+  50: "#F3F6F9",
+  100: "#E5EAF2",
+  200: "#DAE2ED",
+  300: "#C7D0DD",
+  400: "#B0B8C4",
+  500: "#9DA8B7",
+  600: "#6B7A90",
+  700: "#434D5B",
+  800: "#303740",
+  900: "#1C2025",
 };
 
 const Modal = styled(BaseModal)`
@@ -158,9 +159,9 @@ const StyledBackdrop = styled(Backdrop)`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const ModalContent = styled('div')(
+const ModalContent = styled("div")(
   ({ theme }) => css`
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: "IBM Plex Sans", sans-serif;
     font-weight: 500;
     text-align: start;
     position: relative;
@@ -168,13 +169,13 @@ const ModalContent = styled('div')(
     flex-direction: column;
     gap: 8px;
     overflow: hidden;
-    background-color: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+    background-color: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
     border-radius: 8px;
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+    border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
     box-shadow: 0 4px 12px
-      ${theme.palette.mode === 'dark' ? 'rgb(0 0 0 / 0.5)' : 'rgb(0 0 0 / 0.2)'};
+      ${theme.palette.mode === "dark" ? "rgb(0 0 0 / 0.5)" : "rgb(0 0 0 / 0.2)"};
     padding: 24px;
-    color: ${theme.palette.mode === 'dark' ? grey[50] : grey[900]};
+    color: ${theme.palette.mode === "dark" ? grey[50] : grey[900]};
 
     & .modal-title {
       margin: 0;
@@ -186,7 +187,7 @@ const ModalContent = styled('div')(
       margin: 0;
       line-height: 1.5rem;
       font-weight: 400;
-      color: ${theme.palette.mode === 'dark' ? grey[400] : grey[800]};
+      color: ${theme.palette.mode === "dark" ? grey[400] : grey[800]};
       margin-bottom: 4px;
     }
   `,

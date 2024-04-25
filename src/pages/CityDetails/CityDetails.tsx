@@ -4,21 +4,20 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import HourlyForecast from "../../components/HourlyForecast/HourlyForecast";
 import iconUrlFromCode from "../../utils/iconUrlFromCode";
-import WeatherInfoBlock from "../../components/WeatherInfoBlock/WeatherInfoBlock";
 import toLocalTime from "../../utils/toLocalTime";
 import { WeatherData } from "../../types/WeatherData";
+import WeatherInfoBlock from "../../components/WeatherInfoBlock/WeatherInfoBlock";
 
 export const CityDetails: React.FC = () => {
   const { city } = useParams();
 
   const [cityDetails, setCityDetails] = useState<WeatherData | null>(null);
 
-
   useEffect(() => {
     const fetchCityDetails = async () => {
       try {
         const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_WEATHER_APP_API_KEY}`
+          `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_WEATHER_APP_API_KEY}`,
         );
         setCityDetails(response.data);
       } catch (error) {
@@ -35,7 +34,6 @@ export const CityDetails: React.FC = () => {
   }
 
   console.log(cityDetails);
-
 
   return (
     <div style={{ marginTop: "100px" }}>
@@ -75,13 +73,16 @@ export const CityDetails: React.FC = () => {
                 >
                   {cityDetails.name},
                 </Typography>
-                <Typography fontSize="24px">{cityDetails.sys.country}</Typography>
+                <Typography fontSize="24px">
+                  {cityDetails.sys.country}
+                </Typography>
               </Box>
 
               <Typography fontSize="48px">{`${cityDetails.main.temp.toFixed()}°C`}</Typography>
 
               <Box display="flex" columnGap="5px" color="black">
-                <Typography>{`High: ${cityDetails.main.temp_max.toFixed()}°C`}</Typography>|
+                <Typography>{`High: ${cityDetails.main.temp_max.toFixed()}°C`}</Typography>
+                |
                 <Typography>{`Low: ${cityDetails.main.temp_min.toFixed()}°C`}</Typography>
               </Box>
             </Box>
@@ -97,11 +98,12 @@ export const CityDetails: React.FC = () => {
 
         <Box order={{ md: 0, xs: 3 }}>
           <Typography fontSize={18}>
-            Local time: {`${toLocalTime(cityDetails.dt * 1000, cityDetails.timezone, 'dddd, h:mm a')}`}
+            Local time:{" "}
+            {`${toLocalTime(cityDetails.dt * 1000, cityDetails.timezone, "dddd, h:mm a")}`}
           </Typography>
         </Box>
 
-        <Box textAlign={{ sm: 'end', xs: 'start' }} order={{ md: 0, xs: 2 }}>
+        <Box textAlign={{ sm: "end", xs: "start" }} order={{ md: 0, xs: 2 }}>
           <Typography fontSize={18}>Hourly Forecast</Typography>
           <HourlyForecast
             lat={cityDetails.coord.lat}
@@ -109,7 +111,6 @@ export const CityDetails: React.FC = () => {
             timezone={cityDetails.timezone}
           />
         </Box>
-
       </Paper>
     </div>
   );

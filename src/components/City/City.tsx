@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { db } from "../../firebase/firebaseinit";
 import {
   collection,
@@ -10,9 +10,6 @@ import {
 import "./City.scss";
 import { CityDetail } from "../../types/CityDetail";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks";
-import { getCity } from "../../features/weatherSlice";
-import { Paper } from "@mui/material";
 
 interface Props {
   city: CityDetail;
@@ -30,14 +27,8 @@ export const City: React.FC<Props> = ({ city, edit }) => {
     });
   };
 
-  const goToWeather = (e: React.MouseEvent<HTMLDivElement>) => {
-    if ((e.target as HTMLElement).classList.contains("edit")) {
-      return;
-    }
-  };
-
   return (
-    <Link to={city.city} className="city">
+    <Link to={city.city} className="city" style={{ textDecoration: "none" }}>
       {edit && <i onClick={removeCity} className="far fa-trash-alt edit"></i>}
       <span>{city.city}</span>
       <div className="weather">

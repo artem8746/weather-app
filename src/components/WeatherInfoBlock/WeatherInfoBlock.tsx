@@ -1,13 +1,13 @@
-import { Typography, Box, BoxProps } from '@mui/material';
-import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import AirIcon from '@mui/icons-material/Air';
+import { Typography, Box, BoxProps } from "@mui/material";
+import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import AirIcon from "@mui/icons-material/Air";
 
 type WeatherInfoProps = {
   feels_like: number;
   humidity: number;
   speed: number;
-} & BoxProps<'div'>;
+} & BoxProps<"div">;
 
 export default function WeatherInfoBlock({
   feels_like,
